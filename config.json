@@ -1,6 +1,6 @@
 {
     "path":"todo.txt",
-    "render":"unicode",
+    "renderASCII":false,
     "filetype":"txt"
 
 }
