@@ -1,11 +1,66 @@
-from datetime import datetime
+import datetime
 import random
+import re
 
+def next_weekday(d, weekday):
+    days_ahead = weekday - d.weekday()
+    if days_ahead <= 0: # Target day already happened this week
+        days_ahead += 7
+    return d + datetime.timedelta(days_ahead)
+
+def convertDate(input_str:str) -> str:
+    date_full = re.compile('^[0-3]?[0-9]\.[0-3]?[0-9]\.20[0-9]{1,2}')
+    date_half_year = re.compile('^[0-3]?[0-9]\.[0-3]?[0-9]\.[0-9]{1,2}')
+    date_no_year = re.compile('^[0-3]?[0-9]\.[01]?[0-9]')
+    weekday_no_number = re.compile('^(mo|di|mi|do|fr|sa|so)')
+    weekday_number = re.compile('^[0-9]+(mo|di|mi|do|fr|sa|so)')
+    number = re.compile('^-?[0-9]+')
+    if date_full.fullmatch(input_str):
+        date = datetime.strptime(input_str, '%d.%m.%Y').date()
+
+    elif date_half_year.fullmatch(input_str):
+        date = datetime.strptime(input_str, '%d.%m.%y').date()
+
+    elif date_no_year.fullmatch(input_str):
+        date = (datetime.strptime(input_str, '%d.%m'))
+        current_year = int(datetime.today().strftime("%Y"))
+        date = date.replace(year = current_year).date()
+
+    elif weekday_no_number.fullmatch(input_str):
+        translation = {
+            "mo":0,
+            "di":1,
+            "mi":2,
+            "do":3,
+            "fr":4,
+            "sa":5,
+            "so":6}
+        today = datetime.datetime.today().date()
+        date = next_weekday(today, translation[input_str])
+
+    elif weekday_number.fullmatch(input_str):
+        translation = {
+            "mo":0,
+            "di":1,
+            "mi":2,
+            "do":3,
+            "fr":4,
+            "sa":5,
+            "so":6}
+        today = datetime.datetime.today().date()
+        date = next_weekday(today, translation[input_str[-2:]])
+        date = date + datetime.timedelta(days=int(input_str[:-2])*7)
+    
+    elif number.fullmatch(input_str):
+        date = datetime.datetime.today().date() + datetime.timedelta(days=int(input_str))
+    else:
+        date = None
+    return date.strftime("%d.%m.%y")
 
 def formatdate(input_str: str) -> str:
     parts = input_str.split(".")
     return  f"{parts[0] if len(parts[0]) == 2 else ' '+parts[0]}.{parts[1] if len(parts[1]) == 2 else ' '+parts[1]}.{parts[2]}"
-
+    
 def save_todo(all_todos:list, path:str):
     result = ""
     for line in all_todos:
@@ -16,11 +71,11 @@ def save_todo(all_todos:list, path:str):
 
 def load_todo(path: str):
     todo = []
-    today = datetime.today()
+    today = datetime.datetime.today()
     with open(path,"r") as todo:
         all_todos = [[element.strip() for element in line.strip("\n").split("|")] for line in todo]
     all_todos.sort(key=lambda element:( 0 if element[0] == "" else 1,
-                                (datetime.strptime(element[3], '%d.%m.%y')-datetime.today()).total_seconds() if element[0] == "" else -(datetime.strptime(element[3], '%d.%m.%y')-datetime.today()).total_seconds()))
+                                (datetime.datetime.strptime(element[3], '%d.%m.%y')-datetime.datetime.today()).total_seconds() if element[0] == "" else -(datetime.datetime.strptime(element[3], '%d.%m.%y')-datetime.datetime.today()).total_seconds()))
     return all_todos
 
 def print_active_todo(path:str,simpleMode:bool):
@@ -76,22 +131,25 @@ def print_all_todo(path:str,simpleMode:bool):
         print("└──┴"+maxlenght_tags*"─"+"┴"+maxlenght_content*"─"+"┴────────┘")
     save_todo(all_todos,path)
 
-def check_todo(index: int, part:str):
+def check_todo(index: int, path:str):
     all_todos = load_todo(path)
     all_todos[index][0] = "x"
     #all_todos.pop(index)
     save_todo(all_todos, path)
 
 def add_todo(tag:str,description:str,date:str,path:str):
-    today = datetime.today()
+    today = datetime.datetime.today()
     all_todos = load_todo(path)
     
-    all_todos.append(["",tag,description,date])
+    all_todos.append(["",tag,description,convertDate(date)])
     
     all_todos.sort(key=lambda element:( 0 if element[0] == "" else 1,
-                                (datetime.strptime(element[3], '%d.%m.%y')-datetime.today()).total_seconds() if element[0] == "" else -(datetime.strptime(element[3], '%d.%m.%y')-datetime.today()).total_seconds(),
+                                (datetime.datetime.strptime(element[3], '%d.%m.%y')-datetime.datetime.today()).total_seconds() if element[0] == "" else -(datetime.datetime.strptime(element[3], '%d.%m.%y')-datetime.datetime.today()).total_seconds(),
                                 ))
     
     
     save_todo(all_todos, path)
     return all_todos
+
+
+print(convertDate("-7"))
