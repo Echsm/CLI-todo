@@ -23,15 +23,6 @@ elif args[0] == "check":
         functions.check_todo(int(input("index:")),config["path"])
 elif args[0] == "add":
     if len(args) == 4:
-        
         functions.add_todo(args[1],args[2],args[3],config["path"])
     else:
-        functions.check_todo(int(input("index:")),config["path"])
-    
-
-
-# add -> start adder input
-# add tag desc time
-
-# rm -> start Remover Input
-# rm 2 -> remove 2
+        functions.add_todo(input("tag:"),input("description:"),input("date:"),config["path"])

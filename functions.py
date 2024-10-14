@@ -1,5 +1,4 @@
 import datetime
-import random
 import re
 
 def next_weekday(d, weekday):
@@ -49,7 +48,7 @@ def convertDate(input_str:str) -> str:
             "so":6}
         today = datetime.datetime.today().date()
         date = next_weekday(today, translation[input_str[-2:]])
-        date = date + datetime.timedelta(days=int(input_str[:-2])*7)
+        date = date + datetime.timedelta(days=(int(input_str[:-2])-1)*7)
     
     elif number.fullmatch(input_str):
         date = datetime.datetime.today().date() + datetime.timedelta(days=int(input_str))
