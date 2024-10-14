@@ -1,4 +1,16 @@
 # Simple Commandline TODO application
+### Showcase
+```
+python3 todo.py showall
+>┌──┬──────┬───────────────┬────────┐
+>│00│work  │finish todo app│29.10.24│
+>│01│school│exam math      │30.10.24│
+>│02│home  │clean kitchen  │31.10.24│
+>├──┼──────┼───────────────┼────────┤
+>│ ✓│home  │groceries      │28.10.24│
+>│ ✓│school│german homework│26.10.24│
+>└──┴──────┴───────────────┴────────┘
+```
 
 ### Installation
 1. Clone Repo

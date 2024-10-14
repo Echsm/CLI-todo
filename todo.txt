@@ -1,7 +1,5 @@
-|mathe|fliplearning|28.10.24
-|powi|präsentation|28.10.24
-|ethik|präsentation|28.10.24
-|powi|selbsteinschätzung|28.10.24
-|Klausur|info|29.10.24
-|Klausur|Kunst|30.10.24
-|Klausur|Powi|31.10.24
+|work|finish todo app|29.10.24
+|school|exam math|30.10.24
+|home|clean kitchen|31.10.24
+x|home|groceries|28.10.24
+x|school|german homework|26.10.24
