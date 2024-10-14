@@ -73,6 +73,7 @@ def load_todo(path: str):
     today = datetime.datetime.today()
     with open(path,"r") as todo:
         all_todos = [[element.strip() for element in line.strip("\n").split("|")] for line in todo]
+    print(all_todos)
     all_todos.sort(key=lambda element:( 0 if element[0] == "" else 1,
                                 (datetime.datetime.strptime(element[3], '%d.%m.%y')-datetime.datetime.today()).total_seconds() if element[0] == "" else -(datetime.datetime.strptime(element[3], '%d.%m.%y')-datetime.datetime.today()).total_seconds()))
     return all_todos
